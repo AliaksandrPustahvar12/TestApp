@@ -122,7 +122,7 @@ final class PhotoDetailsController: UIViewController {
         
         preName.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            preName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 12),
+            preName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
             preName.rightAnchor.constraint(equalTo: authorNameLabel.leftAnchor, constant: -3),
             preName.heightAnchor.constraint(equalToConstant: 45)
         ])
@@ -136,7 +136,7 @@ final class PhotoDetailsController: UIViewController {
         
         preLocation.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            preLocation.topAnchor.constraint(equalTo: preName.bottomAnchor, constant: 1),
+            preLocation.topAnchor.constraint(equalTo: preName.bottomAnchor, constant: 2),
             preLocation.rightAnchor.constraint(equalTo: photoLocation.leftAnchor, constant: -3),
             preLocation.heightAnchor.constraint(equalToConstant: 40)
         ])
@@ -150,7 +150,7 @@ final class PhotoDetailsController: UIViewController {
         
         preDate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            preDate.topAnchor.constraint(equalTo: preLocation.bottomAnchor, constant: 5),
+            preDate.topAnchor.constraint(equalTo: preLocation.bottomAnchor, constant: 6),
             preDate.rightAnchor.constraint(equalTo: dateLabel.leftAnchor, constant: -3),
             preDate.heightAnchor.constraint(equalToConstant: 40)
         ])

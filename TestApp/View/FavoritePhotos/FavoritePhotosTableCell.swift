@@ -13,8 +13,8 @@ final class FavoritePhotosTableCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
-        imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.systemGray6.cgColor
+        imageView.layer.borderWidth = 3
+        imageView.layer.borderColor = UIColor.systemMint.cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -34,7 +34,7 @@ final class FavoritePhotosTableCell: UITableViewCell {
         self.layer.borderColor = UIColor.systemMint.cgColor
         self.layer.borderWidth = 3
         self.layer.cornerRadius = 20
-        self.backgroundColor = .systemGray5
+        self.backgroundColor = .white.withAlphaComponent(0.4)
         addSubviews()
         configureConstraints()
     }

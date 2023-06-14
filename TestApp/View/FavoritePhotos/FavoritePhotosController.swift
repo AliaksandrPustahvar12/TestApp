@@ -11,6 +11,7 @@ final class FavoritePhotosController: UIViewController {
     
     private let netService = NetworkService()
     private let dbService = DataBaseService()
+    private let warningLabel = UILabel()
     private var favoritesArray: [Photo] = []
     private var tableView: UITableView!
     
@@ -28,6 +29,26 @@ final class FavoritePhotosController: UIViewController {
         super.viewWillAppear(animated)
         favoritesArray = dbService.favorites()
         tableView.reloadData()
+        
+        if favoritesArray.isEmpty {
+            setUpWarningView()
+        } else {
+            warningLabel.removeFromSuperview()
+        }
+    }
+    
+    private func setUpWarningView() {
+        warningLabel.textAlignment = .center
+        warningLabel.text = "You don't have saved photos"
+        warningLabel.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
+        warningLabel.textColor = .black
+        view.addSubview(warningLabel)
+        
+        warningLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            warningLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            warningLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height / 3)
+        ])
     }
 }
 
@@ -56,6 +77,9 @@ extension FavoritePhotosController: UITableViewDataSource {
             self.dbService.deleteFromFavorites(photoId: item.photoId ?? "")
             self.favoritesArray.remove(at: indexPath.row)
             self.tableView.reloadData()
+            if self.favoritesArray.isEmpty {
+                self.setUpWarningView()
+            }
             completionHandler(true)
         }
         let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction])
