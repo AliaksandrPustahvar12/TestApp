@@ -13,24 +13,39 @@ final class PhotoDetailsController: UIViewController {
     let imageView = UIImageView()
     let favoriteButton = UIButton(type: .system)
     var detailsItem: DetailsModel!
+    private let spinner = UIActivityIndicatorView()
     var deleteItem: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         view.backgroundColor = .systemMint
-        
+        setUpSpinner()
         Task { @MainActor in
             imageView.image = await netService.getPhoto(from: detailsItem.url)
+            setupView()
+            spinner.stopAnimating()
         }
     }
     
+    private func setUpSpinner() {
+        spinner.style = .large
+        spinner.color = UIColor.black
+        self.view.addSubview(spinner)
+        spinner.startAnimating()
+        
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
+            spinner.widthAnchor.constraint(equalToConstant: view.frame.width * 0.9),
+            spinner.heightAnchor.constraint(equalToConstant: view.frame.width * 0.9)
+        ])
+    }
+    
     private func setupView() {
-
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 12
+        imageView.layer.cornerRadius = 24
         imageView.clipsToBounds = true
-        imageView.tintColor = UIColor.darkGray
         view.addSubview(imageView)
         
         let preName = UILabel()
@@ -72,7 +87,7 @@ final class PhotoDetailsController: UIViewController {
         dateFormatter.dateFormat = "dd-MM-yyyy"
         dateFormatter.dateStyle = .long
         let date: Date? = dateFormatter.date(from: detailsItem.createdAt)
-    
+        
         let dateLabel = UILabel()
         dateLabel.textAlignment = .left
         dateLabel.text = dateFormatter.string(from: date ?? .now)
@@ -101,15 +116,20 @@ final class PhotoDetailsController: UIViewController {
         favoriteButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         view.addSubview(favoriteButton)
         
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        let maxsize = view.frame.width * 0.9
+        let imageSize = imageView.image?.size ?? .zero
+        let ratio = imageSize.width / imageSize.height
+        let imageViewWidth = imageSize.width > imageSize.height ? maxsize : maxsize * ratio
+        let imageViewHeight = imageSize.width > imageSize.height ? maxsize / ratio : maxsize
+        
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
-            imageView.widthAnchor.constraint(equalToConstant: view.frame.width * 0.90),
-            imageView.heightAnchor.constraint(equalToConstant: view.frame.width * 0.90)
+            imageView.widthAnchor.constraint(equalToConstant: imageViewWidth),
+            imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
         ])
-
+        
         preName.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             preName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 3),

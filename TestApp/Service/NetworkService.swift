@@ -37,7 +37,6 @@ final class NetworkService {
         urlComponents.path = "/search/photos"
         urlComponents.queryItems?.append(.init(name: "per_page", value: "27"))
         urlComponents.queryItems?.append(.init(name: "query", value: search))
-        print(urlComponents)
         do {
             let dto =  try await  AF.request(urlComponents).serializingDecodable(SearchResultDto.self, decoder: decoder).value
             return dto.results
