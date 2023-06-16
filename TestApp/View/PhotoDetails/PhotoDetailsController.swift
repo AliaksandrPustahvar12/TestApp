@@ -17,7 +17,7 @@ final class PhotoDetailsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupScrollView()
+        setupView()
         view.backgroundColor = .systemMint
         
         Task { @MainActor in
@@ -25,50 +25,48 @@ final class PhotoDetailsController: UIViewController {
         }
     }
     
-    private func setupScrollView() {
-        let scrollView = UIScrollView(frame: view.bounds)
-        scrollView.isScrollEnabled = true
-        view.addSubview(scrollView)
+    private func setupView() {
+
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
         imageView.tintColor = UIColor.darkGray
-        scrollView.addSubview(imageView)
+        view.addSubview(imageView)
         
         let preName = UILabel()
         preName.textAlignment = .right
         preName.text = "Name:"
         preName.font = UIFont.systemFont(ofSize: 13, weight: .light)
         preName.textColor = .darkGray
-        scrollView.addSubview(preName)
+        view.addSubview(preName)
         
         let authorNameLabel = UILabel()
         authorNameLabel.textAlignment = .left
         authorNameLabel.text = detailsItem.name
-        authorNameLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        authorNameLabel.font = UIFont.boldSystemFont(ofSize: 25)
         authorNameLabel.adjustsFontSizeToFitWidth = true
-        scrollView.addSubview(authorNameLabel)
+        view.addSubview(authorNameLabel)
         
         let preLocation = UILabel()
         preLocation.textAlignment = .right
         preLocation.text = "Location:"
         preLocation.font = UIFont.systemFont(ofSize: 13, weight: .light)
         preLocation.textColor = .darkGray
-        scrollView.addSubview(preLocation)
+        view.addSubview(preLocation)
         
         let photoLocation = UILabel()
         photoLocation.text = detailsItem.location
-        photoLocation.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        photoLocation.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         photoLocation.textAlignment = .left
         photoLocation.adjustsFontSizeToFitWidth = true
-        scrollView.addSubview(photoLocation)
+        view.addSubview(photoLocation)
         
         let preDate = UILabel()
         preDate.text = "Created at:"
         preDate.font = UIFont.systemFont(ofSize: 13, weight: .light)
         preDate.textColor = .darkGray
         preDate.textAlignment = .right
-        scrollView.addSubview(preDate)
+        view.addSubview(preDate)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
@@ -79,21 +77,21 @@ final class PhotoDetailsController: UIViewController {
         dateLabel.textAlignment = .left
         dateLabel.text = dateFormatter.string(from: date ?? .now)
         dateLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        scrollView.addSubview(dateLabel)
+        view.addSubview(dateLabel)
         
         let preDownloads = UILabel()
         preDownloads.text = "Downloads:"
         preDownloads.font = UIFont.systemFont(ofSize: 13, weight: .light)
         preDownloads.textColor = .darkGray
         preDownloads.textAlignment = .right
-        scrollView.addSubview(preDownloads)
+        view.addSubview(preDownloads)
         
         
         let downloadsLabel = UILabel()
         downloadsLabel.text = detailsItem.downloads
         downloadsLabel.textAlignment = .left
         downloadsLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        scrollView.addSubview(downloadsLabel)
+        view.addSubview(downloadsLabel)
         
         favoriteButton.layer.cornerRadius = 18
         favoriteButton.layer.borderWidth = 2
@@ -101,86 +99,80 @@ final class PhotoDetailsController: UIViewController {
         favoriteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 23)
         favoriteButton.layer.borderColor = UIColor.black.cgColor
         favoriteButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        scrollView.addSubview(favoriteButton)
+        view.addSubview(favoriteButton)
         
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
-            imageView.widthAnchor.constraint(equalToConstant: view.frame.width * 0.75),
-            imageView.heightAnchor.constraint(equalToConstant: view.frame.width * 0.75)
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
+            imageView.widthAnchor.constraint(equalToConstant: view.frame.width * 0.90),
+            imageView.heightAnchor.constraint(equalToConstant: view.frame.width * 0.90)
         ])
-        
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        
+
         preName.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            preName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
-            preName.rightAnchor.constraint(equalTo: authorNameLabel.leftAnchor, constant: -3),
+            preName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 3),
+            preName.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 3),
             preName.heightAnchor.constraint(equalToConstant: 45)
         ])
         
         authorNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            authorNameLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            authorNameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 7),
+            authorNameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0),
+            authorNameLabel.leftAnchor.constraint(equalTo: preName.rightAnchor, constant: 3),
+            authorNameLabel.widthAnchor.constraint(equalToConstant: view.frame.width * 0.85),
             authorNameLabel.heightAnchor.constraint(equalToConstant: 45)
         ])
         
         preLocation.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            preLocation.topAnchor.constraint(equalTo: preName.bottomAnchor, constant: 2),
-            preLocation.rightAnchor.constraint(equalTo: photoLocation.leftAnchor, constant: -3),
-            preLocation.heightAnchor.constraint(equalToConstant: 40)
+            preLocation.topAnchor.constraint(equalTo: preName.bottomAnchor, constant: 0),
+            preLocation.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 3),
+            preLocation.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         photoLocation.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            photoLocation.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            photoLocation.topAnchor.constraint(equalTo: authorNameLabel.bottomAnchor, constant: 4),
-            photoLocation.heightAnchor.constraint(equalToConstant: 40)
+            photoLocation.topAnchor.constraint(equalTo: authorNameLabel.bottomAnchor, constant: 2),
+            photoLocation.leftAnchor.constraint(equalTo: preLocation.rightAnchor, constant: 3),
+            photoLocation.widthAnchor.constraint(equalToConstant: view.frame.width * 0.85),
+            photoLocation.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         preDate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            preDate.topAnchor.constraint(equalTo: preLocation.bottomAnchor, constant: 6),
-            preDate.rightAnchor.constraint(equalTo: dateLabel.leftAnchor, constant: -3),
-            preDate.heightAnchor.constraint(equalToConstant: 40)
+            preDate.topAnchor.constraint(equalTo: preLocation.bottomAnchor, constant: 4),
+            preDate.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 3),
+            preDate.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dateLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            dateLabel.topAnchor.constraint(equalTo: photoLocation.bottomAnchor, constant: 6),
-            dateLabel.heightAnchor.constraint(equalToConstant: 40)
+            dateLabel.leftAnchor.constraint(equalTo: preDate.rightAnchor, constant: 3),
+            dateLabel.topAnchor.constraint(equalTo: photoLocation.bottomAnchor, constant: 4),
+            dateLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         preDownloads.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             preDownloads.topAnchor.constraint(equalTo: preDate.bottomAnchor, constant: 5),
-            preDownloads.rightAnchor.constraint(equalTo: downloadsLabel.leftAnchor, constant: -3),
-            preDownloads.heightAnchor.constraint(equalToConstant: 40)
+            preDownloads.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 3),
+            preDownloads.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         downloadsLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            downloadsLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            downloadsLabel.leftAnchor.constraint(equalTo: preDownloads.rightAnchor, constant: 3),
             downloadsLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 5),
-            downloadsLabel.heightAnchor.constraint(equalToConstant: 40)
+            downloadsLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
         favoriteButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            favoriteButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            favoriteButton.topAnchor.constraint(equalTo: downloadsLabel.bottomAnchor, constant: 20),
+            favoriteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            favoriteButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             favoriteButton.widthAnchor.constraint(equalToConstant: 250),
-            favoriteButton.heightAnchor.constraint(equalToConstant: 45)
+            favoriteButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
